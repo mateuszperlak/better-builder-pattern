@@ -27,9 +27,10 @@ function deepClone<T>(obj: T): T {
 
 export function Builder<T extends object, M extends Record<string, CustomMethod<T, any[], any>> = Record<string, never>>(
   customMethods: M = {} as M,
+  defaultData: Partial<T> = {},
 ): () => BuilderInstance<T, M> {
   return () => {
-    const data: T = {} as T
+    const data: T = deepClone(defaultData) as T
 
     // Create a properly typed build function
     const build = (): T => {

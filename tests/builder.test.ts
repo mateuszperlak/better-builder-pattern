@@ -430,6 +430,178 @@ describe('Builder Pattern', () => {
     })
   })
 
+  test('supports default data', () => {
+    interface User {
+      id: string;
+      name: string;
+      email: string;
+      role: string;
+    }
+
+    const defaultUser = {
+      id: 'default-id',
+      name: 'Default User',
+      email: 'default@example.com',
+      role: 'user',
+    }
+
+    const UserBuilder = Builder<User>({}, defaultUser)
+
+    // Test that default values are used when not overridden
+    const user1 = UserBuilder().build()
+    expect(user1).toEqual(defaultUser)
+
+    // Test that values can be overridden
+    const user2 = UserBuilder()
+      .withId('custom-id')
+      .withName('Custom User')
+      .build()
+
+    expect(user2).toEqual({
+      ...defaultUser,
+      id: 'custom-id',
+      name: 'Custom User',
+    })
+
+    // Test that custom methods work with default data
+    type UserCustomMethods = {
+      withAdminRole: (this: User) => User;
+    }
+
+    const AdminUserBuilder = Builder<User, UserCustomMethods>({
+      withAdminRole(this: User): User {
+        this.role = 'admin'
+        return this
+      },
+    }, defaultUser)
+
+    const adminUser = AdminUserBuilder()
+      .withAdminRole()
+      .build()
+
+    expect(adminUser).toEqual({
+      ...defaultUser,
+      role: 'admin',
+    })
+  })
+
+  test('supports nested default data', () => {
+    interface Address {
+      street: string;
+      city: string;
+      zipCode: string;
+      country: string;
+    }
+
+    interface User {
+      id: string;
+      name: string;
+      address: Address;
+      preferences: {
+        theme: string;
+        notifications: {
+          email: boolean;
+          push: boolean;
+        };
+      };
+    }
+
+    const defaultUser: Partial<User> = {
+      id: 'default-id',
+      name: 'Default User',
+      address: {
+        street: 'Default Street',
+        city: 'Default City',
+        zipCode: '00000',
+        country: 'Default Country',
+      },
+      preferences: {
+        theme: 'light',
+        notifications: {
+          email: true,
+          push: false,
+        },
+      },
+    }
+
+    const UserBuilder = Builder<User>({}, defaultUser)
+
+    const user1 = UserBuilder().build()
+    expect(user1).toEqual(defaultUser)
+
+    const user2 = UserBuilder()
+      .withName('Custom User')
+      .withAddress({
+        street: 'Custom Street',
+        city: 'Custom City',
+        zipCode: '11111',
+        country: 'Custom Country',
+      })
+      .build()
+
+    expect(user2).toEqual({
+      ...defaultUser,
+      name: 'Custom User',
+      address: {
+        street: 'Custom Street',
+        city: 'Custom City',
+        zipCode: '11111',
+        country: 'Custom Country',
+      },
+    })
+
+    const user3 = UserBuilder()
+      .withPreferences({
+        theme: 'dark',
+        notifications: {
+          email: false,
+          push: true,
+        },
+      })
+      .build()
+
+    expect(user3).toEqual({
+      ...defaultUser,
+      preferences: {
+        theme: 'dark',
+        notifications: {
+          email: false,
+          push: true,
+        },
+      },
+    })
+
+    type UserCustomMethods = {
+      withUSAddress: (this: User, street: string, city: string, zipCode: string) => User;
+    }
+
+    const USUserBuilder = Builder<User, UserCustomMethods>({
+      withUSAddress(this: User, street: string, city: string, zipCode: string): User {
+        this.address = {
+          street,
+          city,
+          zipCode,
+          country: 'USA',
+        }
+        return this
+      },
+    }, defaultUser)
+
+    const usUser = USUserBuilder()
+      .withUSAddress('123 Main St', 'Anytown', '12345')
+      .build()
+
+    expect(usUser).toEqual({
+      ...defaultUser,
+      address: {
+        street: '123 Main St',
+        city: 'Anytown',
+        zipCode: '12345',
+        country: 'USA',
+      },
+    })
+  })
+
   test('handles custom methods with no parameters', () => {
     interface User {
       id: string;
