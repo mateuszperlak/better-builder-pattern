@@ -11,7 +11,8 @@
     "test:run": "vitest run",
     "example": "node -r ts-node/register example/index.ts",
     "build": "tsc",
-    "prepare": "npm run build"
+    "prepare": "yarn build",
+    "release": "release-it"
   },
   "keywords": [
     "typescript",
