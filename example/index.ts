@@ -27,17 +27,43 @@ type FooCustomMethods = {
   withKek: (this: Foo, value: boolean) => Foo;
 }
 
-// Create a builder instance with custom methods
+// Default data that will be used as fallback
+const defaultFoo: Partial<Foo> = {
+  id: 'default-id',
+  name: 'default-name',
+  item: {
+    foo: {
+      bar: {
+        nested: {
+          baz: 'default-baz'
+        }
+      }
+    }
+  }
+}
+
+// Create a builder instance with custom methods and default data
 const FooBuilder = Builder<Foo, FooCustomMethods>({
   withKek(this: Foo, value: boolean): Foo {
     this.id = value ? 'kek' : 'not-kek'
-
     return this
   },
-})
+}, defaultFoo)
 
-// Example usage
-const data = FooBuilder()
+// Example usage with default data
+const data1 = FooBuilder().build()
+console.log('Data with defaults:', data1)
+
+// Example usage overriding some defaults
+const data2 = FooBuilder()
+  .withId('123')
+  .withName('test')
+  .withKek(true)
+  .build()
+console.log('Data with overrides:', data2)
+
+// Example usage with full override
+const data3 = FooBuilder()
   .withId('123')
   .withName('test')
   .withKek(true)
@@ -59,5 +85,4 @@ const data = FooBuilder()
     key: 'key1',
   })
   .build()
-
-console.log(data)
+console.log('Data with full override:', data3)

@@ -4,13 +4,14 @@ A TypeScript library that implements an enhanced builder pattern with automatic 
 
 ## Features
 
-- 🚀 Automatically generates `with*` methods based on interface properties
-- 🔒 Full type safety with TypeScript
-- 📦 Support for nested object properties
-- 🛠️ Custom method integration with proper typing
-- ⛓️ Chainable API
-- 📝 Array property support
-- 🏗️ Type-safe `build()` method
+- Automatic generation of `with*` methods based on interface properties
+- Full type safety with TypeScript
+- Support for nested object properties
+- Custom method integration with proper typing
+- Chainable API
+- Array property support
+- Type-safe `build()` method
+- Default data support with fallback values
 
 ## Installation
 
@@ -122,6 +123,42 @@ const YourBuilder = Builder<YourType, CustomMethods>({
     return this;
   },
 });
+```
+
+### Default Data
+Provide default values that will be used as fallbacks when properties aren't explicitly set:
+
+```typescript
+// Define default data
+const defaultUser = {
+  id: 'default-id',
+  name: 'Default User',
+  address: {
+    street: 'Default Street',
+    city: 'Default City',
+    zipCode: '00000',
+    country: 'Default Country'
+  }
+};
+
+// Create a builder with default data
+const UserBuilder = Builder<User>({}, defaultUser);
+
+// Use default values
+const user1 = UserBuilder().build();
+// Result: { id: 'default-id', name: 'Default User', address: {...} }
+
+// Override specific values
+const user2 = UserBuilder()
+  .withName('Custom User')
+  .withAddress({
+    street: 'Custom Street',
+    city: 'Custom City',
+    zipCode: '11111',
+    country: 'Custom Country'
+  })
+  .build();
+// Result: { id: 'default-id', name: 'Custom User', address: {...} }
 ```
 
 ### Array Support
