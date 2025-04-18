@@ -1,7 +1,7 @@
 /**
  * Type for a custom method
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
+
 export type CustomMethod<T, Args extends unknown[], R> = (this: T, ...args: Args) => R;
 
 type WithPrefix<K extends string> = `with${Capitalize<K>}`;
