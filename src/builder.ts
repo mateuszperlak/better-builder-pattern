@@ -29,10 +29,15 @@ export function Builder<T extends object, M extends Record<string, CustomMethod<
   customMethods: M = {} as M,
 ): () => BuilderInstance<T, M> {
   return () => {
-    const data = {} as T
+    const data: T = {} as T
+
+    // Create a properly typed build function
+    const build = (): T => {
+      return deepClone(data)
+    }
 
     const builder = new Proxy({
-      build: () => deepClone(data),
+      build,
       ...Object.entries(customMethods).reduce<Record<string,(...args: any[]) => BuilderInstance<T, M>>>((acc, [key, method]) => {
         acc[key] = function(this: T, ...args: any[]) {
           method.apply(data, args)
