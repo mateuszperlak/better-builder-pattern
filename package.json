@@ -1,0 +1,54 @@
+{
+  "name": "better-builder-pattern",
+  "version": "0.1.0",
+  "description": "A TypeScript library that implements an enhanced builder pattern with automatic method generation, nested property support, and custom method integration",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "lint": "eslint \"src/**/*.ts\" \"example/**/*.ts\" \"tests/**/*.ts\"",
+    "lint:fix": "eslint \"src/**/*.ts\" \"example/**/*.ts\" \"tests/**/*.ts\" --fix",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "example": "node -r ts-node/register example/index.ts",
+    "build": "tsc",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "typescript",
+    "builder",
+    "pattern",
+    "builder-pattern",
+    "type-safe",
+    "automatic",
+    "generation"
+  ],
+  "author": "Mateusz Perlak",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mateuszperlak/better-builder-pattern.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mateuszperlak/better-builder-pattern/issues"
+  },
+  "homepage": "https://github.com/mateuszperlak/better-builder-pattern#readme",
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "@typescript-eslint/eslint-plugin": "^8.30.1",
+    "@typescript-eslint/parser": "^8.30.1",
+    "doctoc": "^2.2.1",
+    "eslint": "^9.16.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-n": "^17.14.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^7.2.1",
+    "eslint-plugin-standard": "^5.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.10",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  }
+}
